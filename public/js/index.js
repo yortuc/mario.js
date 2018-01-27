@@ -14,21 +14,35 @@ function drawBackground(background, context, sprites){
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
+function loadMarioSprite(){
+	return loadImage("/img/characters.gif")
+		.then(image=> {
+			const sprites = new SpriteSheet(image, 16, 16);
+			sprites.define('idle', 276, 44, 16, 16);
+			return sprites;
+		});
+}
+
 function loadBackgroundSprites(){
 	return loadImage("/img/tiles.png")
 		.then(image=> {
 			const sprites = new SpriteSheet(image, 16, 16);
-			sprites.define("ground", 0, 0);
-			sprites.define("sky", 3, 23);
+			sprites.defineTile("ground", 0, 0);
+			sprites.defineTile("sky", 3, 23);
 			return sprites;
 		});
 }
 
 Promise.all([
+	loadMarioSprite(),
 	loadBackgroundSprites(), 
 	loadLevel('1-1')
-]).then(([sprites, level])=>{
+]).then(([marioSprite, sprites, level])=>{
 	console.log(level);
 	level.backgrounds.forEach(background=> 
-		drawBackground(background, context, sprites));
+		drawBackground(background, context, sprites)
+	);
+
+	marioSprite.draw('idle', context, 64, 64);
+
 });

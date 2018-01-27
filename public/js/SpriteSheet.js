@@ -6,18 +6,22 @@ export default class SpriteSheet{
 		this.tiles = new Map();
 	}
 
-	define(name, x, y){
+	define(name, x, y, width, height){	// position of the sprite on the resource image
 		const buffer = document.createElement('canvas');
-		buffer.width = this.tileWidth;
-		buffer.height = this.tileHeight;
+		buffer.width = width;
+		buffer.height = height;
 		buffer
 			.getContext('2d')
 			.drawImage(
 				this.image, 
-				x*this.tileWidth, y*this.tileHeight, this.tileWidth, this.tileHeight,	/* source */
-				0, 0, this.tileWidth, this.tileHeight									/* target */
+				x, y, width, height,	/* source */
+				0, 0, width, height		/* target */
 			);
 		this.tiles.set(name, buffer);
+	}
+
+	defineTile(name, x, y){
+		this.define(name, x*this.tileWidth, y*this.tileHeight, this.tileWidth, this.tileHeight);
 	}
 
 	draw(name, context, x, y){
