@@ -1,4 +1,5 @@
 import {loadImage, loadLevel} from './loader.js';
+import Timer from './Timer.js';
 import Compositor from './Compositor.js';
 import {createBackgroundLayer, createSpriteLayer} from './layers.js';
 import {createMario} from './entities.js';
@@ -27,21 +28,12 @@ Promise.all([
 	const deltaTime = 1/60;
 	let accumulatedTime = 0;
 
-	function update(time){
-		accumulatedTime += (time - lastTime)/1000;
-
-		while(accumulatedTime > deltaTime){
-			comp.draw(context);
-			mario.update(deltaTime);
-
-			mario.vel.y += gravity;
-			requestAnimationFrame(update);
-
-			accumulatedTime -= deltaTime;
-		}
-		requestAnimationFrame(update);
-		lastTime = time;
+	const timer = new Timer(1/60);
+	timer.update = function update(deltaTime){
+		comp.draw(context);
+		mario.update(deltaTime);
+		mario.vel.y += gravity;
 	}
 
-	update(0);
+	timer.start();
 });
