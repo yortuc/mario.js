@@ -15,14 +15,14 @@ Promise.all([
 ]).then(([mario, backgroundSprites, level])=>{
 	const comp = new Compositor();
 	const backgroundLayer = createBackgroundLayer(level.backgrounds, backgroundSprites);
-	// comp.layers.push(backgroundLayer);
+	comp.layers.push(backgroundLayer);
 	
 	const spriteLayer = createSpriteLayer(mario);
 	comp.layers.push(spriteLayer);
 
-	const gravity = 30;
+	const gravity = 2000;
 	mario.pos.set(62, 180);
-	mario.vel.set(200, -400);
+	mario.vel.set(200, -600);
 
 	let lastTime = 0;
 	const deltaTime = 1/60;
@@ -30,9 +30,9 @@ Promise.all([
 
 	const timer = new Timer(1/60);
 	timer.update = function update(deltaTime){
-		comp.draw(context);
 		mario.update(deltaTime);
-		mario.vel.y += gravity;
+		comp.draw(context);
+		mario.vel.y += gravity * deltaTime;
 	}
 
 	timer.start();
