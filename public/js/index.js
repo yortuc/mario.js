@@ -6,7 +6,6 @@ import {loadBackgroundSprites} from './sprites.js';
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
-const gravity = 0.5;
 
 Promise.all([
 	createMario(),
@@ -20,12 +19,23 @@ Promise.all([
 	const spriteLayer = createSpriteLayer(mario);
 	comp.layers.push(spriteLayer);
 
-	function update(){
+	const gravity = 50;
+	mario.pos.set(62, 180);
+	mario.vel.set(200, -600);
+
+	let lastTime = 0;
+	let deltaTime = 0;
+
+	function update(time){
+		deltaTime = (time - lastTime)/1000;
+
 		comp.draw(context);
-		mario.update();
+		mario.update(deltaTime);
 		mario.vel.y += gravity;
 		requestAnimationFrame(update);
+
+		lastTime = time;
 	}
 
-	update();
+	update(0);
 });
